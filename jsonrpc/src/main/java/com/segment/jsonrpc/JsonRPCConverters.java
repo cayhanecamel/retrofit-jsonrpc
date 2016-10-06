@@ -19,6 +19,10 @@ public class JsonRPCConverters {
         @Override
         public T convert(ResponseBody responseBody) throws IOException {
             JsonRPCResponse<T> response = delegate.convert(responseBody);
+            Object error = response.error;
+            if (error != null) {
+                throw new JsonRPCErrorException(response.error);
+            }
             return response.result;
         }
     }
